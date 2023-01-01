@@ -45,7 +45,6 @@ def banner():
 # Send SMS
 def send_sms():
     # Set up Twilio auth with environment variables
-    print(os.getenv('TWILIO_ACCOUNT_SID'))
     account_sid = os.getenv('TWILIO_ACCOUNT_SID')
     auth_token = os.getenv('TWILIO_AUTH_TOKEN')
     client = Client(account_sid, auth_token)
@@ -58,51 +57,44 @@ def send_sms():
         Love,
         CounterTop Bot
         """
-    print(msg)
-    print("Sending sms")
-
+    
     message = client.messages \
                     .create(
                         body=msg,
                         from_='+16614664274',
                         to='+16094577472'
                     )
-    logging.info(message.sid)
+    logging.debug(message.sid)
+    logging.info("SMS SENT")
 
 # Main loop
 def main():
     found = False
     banner()
     print("Finding countertops for my beautiful wife")
-    print("Let's check IKEA")
+    print("Let's check IKEA\n")
     driver.get("https://www.ikea.com/us/en/p/kasker-custom-countertop-light-gray-beige-marble-effect-quartz-80395007/#content")
     driver.implicitly_wait(1)
+    now = time.localtime()
+    curDate = date.today()
+    current_time = time.strftime("%H:%M:%S", now)
+    print("\nStats:")
+    print("Last time price checked --> ", curDate, current_time)
+    print(f"Checking if Current price is below {target_price}\n\n")
+    cur_price = driver.find_element(By.CLASS_NAME, "pip-temp-price__integer")
 
-    while found == False:
-        clear()
-        now = time.localtime()
-        curDate = date.today()
-        current_time = time.strftime("%H:%M:%S", now)
-        print("\nStats:")
-        print("Last time price checked --> ", curDate, current_time)
-        print(f"Checking if Current price is below {target_price}\n")
-        cur_price = driver.find_element(By.CLASS_NAME, "pip-temp-price__integer")
-
-        # Check the price of the countertop
-        if cur_price.text <= target_price:
-            print(f"Awesome! the price is currently ==> {cur_price.text}")
-            send_sms()
-            break
-        else:
-            print(f"The Countertop is still too expensive.\n    ==> Target Price: {target_price}\n    ==> Current price: {cur_price.text}")
-            print("\n\nSearching again tomorrow...")
-            # Sleep for 1 day
-            time.sleep(86400)
-            driver.refresh()
-            continue
+    # Check the price of the countertop
+    if cur_price.text <= target_price:
+        print(f"CONGRATULATIONS! the price has dropped to ==> {cur_price.text}")
+        print("Go to https://www.ikea.com/us/en/p/kasker-custom-countertop-light-gray-beige-marble-effect-quartz-80395007/#content to buy.")
+        send_sms()
+    else:
+        print(f"The Countertop is still too expensive.\n    ==> Target Price: {target_price}\n    ==> Current price: {cur_price.text}")
+        print("\n\nDon't worry, we'll try again tomorrow tomorrow...")
+        logging.info("NOTHING FOUND TODAY. SHUTTING DOWN PROGRAM.")
 
     logging.info("Thanks goodbye I love you!")
-    print("We're all done. Bye.")
+    print("We're all done for now. Bye.")
     driver.close()
 
 if __name__ == "__main__":
