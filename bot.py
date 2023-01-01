@@ -17,7 +17,7 @@ logging.basicConfig(format="%(asctime)s [%(levelname)s] - [%(filename)s > %(func
 # Variables
 clear = lambda: os.system('clear')
 start_time = time.time()
-target_price = '70'
+target_price = '57'
 
 # Webdriver setup
 options = webdriver.ChromeOptions()
