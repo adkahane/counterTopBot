@@ -17,7 +17,7 @@ logging.basicConfig(format="%(asctime)s [%(levelname)s] - [%(filename)s > %(func
 # Variables
 clear = lambda: os.system('clear')
 start_time = time.time()
-target_price = '57'
+target_price = '70'
 
 # Webdriver setup
 options = webdriver.ChromeOptions()
@@ -69,7 +69,6 @@ def send_sms():
 
 # Main loop
 def main():
-    found = False
     banner()
     print("Finding countertops for my beautiful wife")
     print("Let's check IKEA\n")
@@ -90,11 +89,11 @@ def main():
         send_sms()
     else:
         print(f"The Countertop is still too expensive.\n    ==> Target Price: {target_price}\n    ==> Current price: {cur_price.text}")
-        print("\n\nDon't worry, we'll try again tomorrow tomorrow...")
-        logging.info("NOTHING FOUND TODAY. SHUTTING DOWN PROGRAM.")
+        print("\n\nDon't worry, we'll try again tomorrow...")
+        logging.info("NOTHING FOUND TODAY")
 
-    logging.info("Thanks goodbye I love you!")
-    print("We're all done for now. Bye.")
+    logging.info("Shutting down. I love you")
+    print("Bye Bye.")
     driver.close()
 
 if __name__ == "__main__":
