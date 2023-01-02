@@ -17,7 +17,7 @@ logging.basicConfig(format="%(asctime)s [%(levelname)s] - [%(filename)s > %(func
 # Variables
 clear = lambda: os.system('clear')
 start_time = time.time()
-target_price = '57'
+target_price = '58'
 
 # Webdriver setup
 options = webdriver.ChromeOptions()
@@ -38,7 +38,7 @@ def banner():
     | |___| (_) | |_| | | | | ||  __/ |  | || (_) | |_) | | |_) | (_) | |_ 
      \_____\___/ \__,_|_| |_|\__\___|_|   \__\___/| .__/  |____/ \___/ \__|
                                                   | |                      
-                                                  |_|    \n\n                  
+                                                  |_|                      
     """
     print(the_banner)
 
@@ -71,30 +71,30 @@ def send_sms():
 def main():
     clear()
     banner()
-    print("Finding countertops for my beautiful wife")
+    print("Finding countertops for my beautiful wife\n")
+    print(f"Has the price fallen below ${target_price}?\n")
     print("Let's check IKEA\n")
     driver.get("https://www.ikea.com/us/en/p/kasker-custom-countertop-light-gray-beige-marble-effect-quartz-80395007/#content")
     driver.implicitly_wait(1)
     now = time.localtime()
     curDate = date.today()
     current_time = time.strftime("%H:%M:%S", now)
-    print("\nStats:")
-    print("Last time price checked --> ", curDate, current_time)
-    print(f"Checking if Current price is below {target_price}\n\n")
+    print("\nRESULTS:")
+    print("Time Checked --> ", curDate, current_time)
     cur_price = driver.find_element(By.CLASS_NAME, "pip-temp-price__integer")
 
     # Check the price of the countertop
     if cur_price.text <= target_price:
-        print(f"CONGRATULATIONS! the price has dropped to ==> {cur_price.text}")
-        print("Go to https://www.ikea.com/us/en/p/kasker-custom-countertop-light-gray-beige-marble-effect-quartz-80395007/#content to buy.")
+        print(f"\nCONGRATULATIONS! the price has dropped to ==> {cur_price.text}")
+        print("\nGo to https://www.ikea.com/us/en/p/kasker-custom-countertop-light-gray-beige-marble-effect-quartz-80395007/#content to buy.")
         send_sms()
     else:
-        print(f"The Countertop is still too expensive.\n    ==> Target Price: {target_price}\n    ==> Current price: {cur_price.text}")
+        print(f"\nStill too expensive...\n    ==> Target Price: ${target_price}\n    ==> Current price: ${cur_price.text}")
         print("\n\nDon't worry, we'll try again tomorrow...")
         logging.info("NOTHING FOUND TODAY")
 
     logging.info("Shutting down. I love you")
-    print("Bye Bye.")
+    print("\nBye Bye.")
     driver.close()
 
 if __name__ == "__main__":
