@@ -69,6 +69,7 @@ def send_sms():
 
 # Main loop
 def main():
+    clear()
     banner()
     print("Finding countertops for my beautiful wife")
     print("Let's check IKEA\n")
